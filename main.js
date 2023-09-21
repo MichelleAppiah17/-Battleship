@@ -13,8 +13,11 @@ function createYourBoard(){
 
 
 }
-
 createYourBoard();
+
+const shipsContainer = document.querySelector('.ships')
+gameboardContainer.appendChild(shipsContainer)
+
 
 function createOpponentBoard(){
     const opponentBoard = document.createElement('div')
@@ -29,6 +32,17 @@ function createOpponentBoard(){
 
 }
 createOpponentBoard();
+
+const ships = document.querySelectorAll('.ship')
+
+function rotateShip(event) {
+    const ships = event.target;
+    ships.classList.toggle("rotated");
+}
+
+ships.forEach(ships => {
+    ships.addEventListener('dblclick', rotateShip);
+});
 
 
 

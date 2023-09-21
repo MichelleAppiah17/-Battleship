@@ -1,3 +1,6 @@
+body{
+    background-color: rgb(0, 0, 0,0.5);
+}
 .gameName{
     display: flex;
     justify-content: center;
@@ -25,7 +28,6 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 8em;
 }
 .square{
     border: 1px solid black;
@@ -43,41 +45,51 @@
     border-color: rgb(77, 197, 228);
     font-size: larger;
 }
+.boardNames{
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    color: aliceblue;
+    margin-top: 30px;
+}
 .ships{
+    height: 300px;
+    width: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.ship.rotated {
+    transform: rotate(90deg);
 }
 .destroyer{
-    width: 20px;
-    height: 10px;
+    width: 80px;
+    height: 35px;
     background-color: brown;
-    margin: 3px;
 }
 .submarine{
-    width: 30px;
-    height: 10px;
+    width: 80px;
+    height: 35px;
     background-color: rgb(209, 176, 176);
-    margin: 3px;
 }
 .battleship{
-    width: 20px;
-    height: 10px;
+    width: 100px;
+    height: 35px;
     background-color: rgb(126, 201, 7);
-    margin: 3px;
 
 }
 .cruiser{
-    width: 40px;
-    height: 10px;
+    width: 60px;
+    height: 35px;
     background-color: rgb(230, 47, 47);
-    margin: 3px;
 
 }
 .carrier{
-    width: 50px;
-    height: 10px;
+    width: 120px;
+    height: 35px;
     background-color: rgb(250, 24, 201);
-    margin: 3px;
 
 }
