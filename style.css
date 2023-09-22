@@ -66,32 +66,36 @@ body{
     transform: rotate(90deg);
 }
 .destroyer{
-    width: 20px;
-    height: 10px;
+    width: 60px;
+    height: 25px;
     background-color: brown;
 }
 .submarine{
-    width: 30px;
-    height: 10px;
+    width: 80px;
+    height: 25px;
     background-color: rgb(209, 176, 176);
 }
 .battleship{
-    width: 40px;
-    height: 10px;
+    width: 100px;
+    height: 25px;
     background-color: rgb(126, 201, 7);
 
 }
 .cruiser{
-    width: 30px;
-    height: 10px;
+    width: 80px;
+    height: 25px;
     background-color: rgb(230, 47, 47);
 
 }
 .carrier{
-    width: 50px;
-    height: 10px;
+    width: 120px;
+    height: 25px;
     background-color: rgb(250, 24, 201);
 
 }
+.ship.selected {
+    border: 4px solid #333;
+}
+
 
 

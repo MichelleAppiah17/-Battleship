@@ -120,3 +120,88 @@ for (let row = 0; row < gridSize; row++) {
 }
 
 
+let currentShip = null;
+const occupiedCells = new Set();
+
+
+gameShips.forEach(ship => {
+    ship.addEventListener('click', () => {
+        if (currentShip) {
+            
+            currentShip.classList.remove('selected');
+        }
+       
+        currentShip = ship;
+        currentShip.classList.add('selected');
+    });
+});
+
+const yourBoard = document.querySelector('.yourBoard')
+yourBoard.addEventListener('click', (e) => {
+    if (currentShip) {
+        const square = e.target;
+
+        const row = parseInt(square.id / gridSize);
+        const col = square.id % gridSize;
+
+        const position = {
+            randomRow: row,
+            randomColumn: col,
+            isHorizontal: !currentShip.classList.contains('rotated'),
+        };
+
+        const canFit = canShipFit(currentShip, position);
+
+        if (canFit && correctPosition(currentShip, position) && !doesOverlap(position, currentShip)) {
+            for (let i = 0; i < currentShip.getAttribute('data-size'); i++) {
+                if (position.isHorizontal) {
+                    grid[row][col + i] = true;
+                } else {
+                    grid[row + i][col] = true;
+                }
+                occupiedCells.add(row * gridSize + col + (position.isHorizontal ? i : i * gridSize));
+            }
+
+            currentShip.position = position;
+
+            for (let i = 0; i < currentShip.getAttribute('data-size'); i++) {
+                const cellId = row * gridSize + col + (position.isHorizontal ? i : i * gridSize);
+                const cell = document.querySelector(`.yourBoard .square[id="${cellId}"]`);
+                cell.classList.add('occupied');
+                cell.style.backgroundColor = window.getComputedStyle(currentShip).backgroundColor;
+            }
+
+            currentShip.style.display = 'none';
+            currentShip.classList.remove('selected'); 
+            currentShip = null;
+        }
+    }
+});
+
+function doesOverlap(position, ship) {
+    const { randomRow, randomColumn, isHorizontal } = position;
+    for (let i = 0; i < ship.getAttribute('data-size'); i++) {
+        const cellId = randomRow * gridSize + randomColumn + (isHorizontal ? i : i * gridSize);
+        if (occupiedCells.has(cellId)) return true;
+    }
+    return false;
+}
+
+function canShipFit(ship, position) {
+    const gridSize = 10; 
+    const { randomRow, randomColumn, isHorizontal } = position;
+    const shipSize = parseInt(ship.getAttribute('data-size'));
+
+    if (isHorizontal) {
+        if (randomColumn + shipSize > gridSize) {
+            return false; 
+        }
+    } else {
+        if (randomRow + shipSize > gridSize) {
+            return false; 
+        }
+    }
+
+    return true; 
+}
+
