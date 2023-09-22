@@ -52,7 +52,7 @@ body{
     color: aliceblue;
     margin-top: 30px;
 }
-.ships{
+.shipsContainer{
     height: 300px;
     width: 200px;
     display: flex;
@@ -66,30 +66,32 @@ body{
     transform: rotate(90deg);
 }
 .destroyer{
-    width: 80px;
-    height: 35px;
+    width: 20px;
+    height: 10px;
     background-color: brown;
 }
 .submarine{
-    width: 80px;
-    height: 35px;
+    width: 30px;
+    height: 10px;
     background-color: rgb(209, 176, 176);
 }
 .battleship{
-    width: 100px;
-    height: 35px;
+    width: 40px;
+    height: 10px;
     background-color: rgb(126, 201, 7);
 
 }
 .cruiser{
-    width: 60px;
-    height: 35px;
+    width: 30px;
+    height: 10px;
     background-color: rgb(230, 47, 47);
 
 }
 .carrier{
-    width: 120px;
-    height: 35px;
+    width: 50px;
+    height: 10px;
     background-color: rgb(250, 24, 201);
 
 }
+
+
