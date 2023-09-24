@@ -122,6 +122,7 @@ for (let row = 0; row < gridSize; row++) {
 }
 
 
+
 let currentShip = null;
 const occupiedCells = new Set();
 
@@ -171,18 +172,16 @@ yourBoard.addEventListener('click', (e) => {
                 const cell = document.querySelector(`.yourBoard .square[id="${cellId}"]`);
                 cell.classList.add('occupied');
                 cell.style.backgroundColor = window.getComputedStyle(currentShip).backgroundColor;
-                cell.style.backgroundColor = "pink"
-               // yourBoard.style.backgroundColor = "pink"
+                cell.style.backgroundColor = "purple"
+
 
             }
-         //   yourBoard.style.backgroundColor = "pink"
 
             currentShip.style.display = 'none';
             currentShip.classList.remove('selected'); 
             currentShip = null;
         }
     }
-   // yourBoard.style.backgroundColor = "pink"
 
 });
 
@@ -213,103 +212,94 @@ function canShipFit(ship, position) {
     return true; 
 }
 
+const opponentSquares = opponentBoard.querySelectorAll('.square');
+
+
+let shipsArranged = false;
+const startButton = document.querySelector('.startBtn');
 document.addEventListener('DOMContentLoaded', function() {
     const arrangeShipsButton = document.querySelector('.arrangeShipsBtn');
     const shipsContainer = document.querySelector('.shipsContainer');
 
     arrangeShipsButton.addEventListener('click', () => {
         shipsContainer.style.display = 'flex';
+        shipsArranged = true; 
+        arrangeShipsButton.style.display = 'none';
+        startButton.style.display = 'flex';
+       // alert("Double click after arranging ships"); 
+        shipsArranged = false;   
+        
+    });
+});
+
+startButton.addEventListener('dblclick', () => {
+    yourBoard.style.backgroundColor = "purple";
+    yourBoard.addEventListener('click', (e) => {
+        const square = e.target;
+        const row = parseInt(square.id / gridSize);
+        const col = square.id % gridSize;
+        const containsShip = grid[row][col];
+
        
     });
-});
+})
+
+const yourSquares = document.querySelectorAll('.yourBoard .square');
 
 
+let yourHits = 0;
+let computerHits = 0;
+let gameIsOver = false;
 
+function handleSquareClick(square) {
+  if (gameIsOver) return;
 
-const opponentSquares = opponentBoard.querySelectorAll('.square');
-opponentSquares.forEach(square => {
-    square.addEventListener('click', () => {
-        const row = parseInt(square.id / gridSize);
-        const col = square.id % gridSize;
-        const ship = ships.find(ship => {
-            const { randomRow: shipRow, randomColumn: shipCol, isHorizontal } = ship.position;
-            if (isHorizontal) {
-                return row === shipRow && col >= shipCol && col < shipCol + ship.size;
-            } else {
-                return col === shipCol && row >= shipRow && row < shipRow + ship.size;
-            }
-        });
+  const row = parseInt(square.id / gridSize);
+  const col = square.id % gridSize;
+  const containsShip = grid[row][col];
 
-        if (ship) {
-            square.style.backgroundColor = 'yellow'; 
-        } else {
-            square.style.backgroundColor = 'lightyellow'; 
-        }
-
-        square.style.pointerEvents = 'none'; 
-    });
-});
-
-
-yourBoard.addEventListener('click', (e) => {
-    if (currentShip) {
-        const square = e.target;
-
-        const row = parseInt(square.id / gridSize);
-        const col = square.id % gridSize;
-
-        const position = {
-            randomRow: row,
-            randomColumn: col,
-            isHorizontal: !currentShip.classList.contains('rotated'),
-        };
-
-        const canFit = canShipFit(currentShip, position);
-
-        if (canFit && correctPosition(currentShip, position) && !doesOverlap(position, currentShip)) {
-            for (let i = 0; i < currentShip.getAttribute('data-size'); i++) {
-                if (position.isHorizontal) {
-                    grid[row][col + i] = true;
-                } else {
-                    grid[row + i][col] = true;
-                }
-                occupiedCells.add(row * gridSize + col + (position.isHorizontal ? i : i * gridSize));
-            }
-
-            currentShip.position = position;
-
-            for (let i = 0; i < currentShip.getAttribute('data-size'); i++) {
-                const cellId = row * gridSize + col + (position.isHorizontal ? i : i * gridSize);
-                const cell = document.querySelector(`.yourBoard .square[id="${cellId}"]`);
-                cell.classList.add('occupied');
-                cell.style.backgroundColor = window.getComputedStyle(currentShip).backgroundColor;
-                cell.style.backgroundColor = "blue";
-            }
-
-            currentShip.style.display = 'none';
-            currentShip.classList.remove('selected');
-            currentShip = null;
-        }
+  if (containsShip) {
+    square.style.backgroundColor = 'red';
+    if (square.parentElement.classList.contains('opponentBoard')) {
+      yourHits++;
     } else {
-        const square = e.target;
-        const row = parseInt(square.id / gridSize);
-        const col = square.id % gridSize;
-
-        
-        const containsShip = grid[row][col];
-        if (containsShip) {
-            
-            square.style.backgroundColor = "blue";
-        } else {
-           
-            square.style.backgroundColor = "green";
-        }
+      computerHits++;
     }
+  } else {
+    square.style.backgroundColor = 'yellow';
+  }
+
+  square.style.pointerEvents = 'none';
+
+  if (yourHits === totalShipsSize) {
+    alert("Congratulations! You won the game!");
+    gameIsOver = true;
+  } else if (computerHits === totalShipsSize) {
+    alert("Game over. The computer won the game.");
+    gameIsOver = true;
+  }
+}
+
+const totalShipsSize = ships.reduce((acc, ship) => acc + ship.size, 0);
+
+opponentSquares.forEach(opponentSquare => {
+  opponentSquare.addEventListener('click', () => {
+    handleSquareClick(opponentSquare);
+
+    setTimeout(() => {
+      let yourSquare;
+      do {
+        const randomIndex = Math.floor(Math.random() * yourSquares.length);
+        yourSquare = yourSquares[randomIndex];
+      } while (yourSquare.style.pointerEvents === 'none');
+
+      handleSquareClick(yourSquare);
+
+      setTimeout(() => {
+        opponentSquares.forEach(square => {
+          square.style.pointerEvents = 'auto';
+        });
+      }, 100);
+    }, 100);
+  });
 });
-
-
-
-
-
-
-
